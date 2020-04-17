@@ -5,3 +5,26 @@ td{
   border: 5px solid black;
   font-size: 100px;
 }
+
+#playerTurn{
+  padding: 8px;
+  text-align: center;
+  font-size: 1.7em;
+}
+
+#playerOWins{
+  padding: 8px;
+  text-align: center;
+  font-size: 1.2em;
+}
+
+#playerXWins{
+  padding: 8px;
+  text-align: center;
+  font-size: 1.2em;
+}
+
+#playerWins{
+  display: flex;
+  flex-direction: column;
+}

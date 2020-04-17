@@ -9,6 +9,8 @@
 // 4. GET THIS GAME WORKING!!
 
 let currentMarker = 'X'
+let xWins = 0;
+let oWins = 0;
 let board = [
   ['','',''],
   ['','',''],
@@ -23,8 +25,42 @@ const handleClick = (element) => {
     addMarker(element.id)
     updateBoard(element.id)
     checkForWin()
+    updatePlayerTurn()
   }
 }
+
+window.addEventListener('load', (event) => {
+  //update user turn when dom is loaded
+  updatePlayerTurn();
+  initPlayerWins();
+});
+
+const updatePlayerTurn = () =>{
+  document.getElementById("playerTurn").innerHTML  = `It's Player ${currentMarker}'s turn`;
+}
+
+const initPlayerWins = () =>{
+  //init the amount of times each player won
+  document.getElementById("playerXWins").innerHTML  = `Player X's score: ${xWins}`;
+  document.getElementById("playerOWins").innerHTML  = `Player O's score: ${oWins}`;
+  
+}
+
+
+const updatePlayerWins = () =>{
+  //update the amount of times each player won
+  if(currentMarker === "X"){
+    xWins++;
+    document.getElementById("playerXWins").innerHTML  = `Player X's score: ${xWins}`;
+    document.getElementById("playerOWins").innerHTML  = `Player O's score: ${oWins}`;
+  }
+  else{
+    oWins++;
+    document.getElementById("playerOWins").innerHTML  = `Player O's score: ${oWins}`;
+    document.getElementById("playerXWins").innerHTML  = `Player X's score: ${xWins}`;
+  }
+}
+
 
 const addMarker = (id) => {
   console.log(`We'll place a mark on square: ${id}`)
@@ -35,6 +71,11 @@ const addMarker = (id) => {
   // .getElementById(id)
   // document
   // .innerHTML 
+
+  document.getElementById(id).innerHTML  = currentMarker;
+
+ 
+  
   
   // Arrange the above pieces into one a single line of code
   // to add an X or O to the board to the DOM so it can be scene on the screen.
@@ -51,6 +92,7 @@ const updateBoard = (id) => {
 
   // @TODO, Your code here: use the above information to change the board variable(array of arrays)
   // HINT: in your browser open up the dev tools -> console
+  board[row][column] = currentMarker;
 }
 
 const checkForWin = () => {
@@ -58,6 +100,9 @@ const checkForWin = () => {
   if(horizontalWin() || verticalWin() || diagonalWin()) {
     // **BONUS** you could make the dismissal of this alert window reset the board...
     window.alert(`Player ${currentMarker} won!`)
+    updatePlayerWins();
+    resetBoard();
+
   } else {
     // if no win, change the marker from X to O, or O to X for the next player.
     changeMarker()
@@ -66,14 +111,44 @@ const checkForWin = () => {
 
 const horizontalWin = () => {
   // @TODO, Your code here: to check for horizontal wins
+  for(let i = 0;i < board.length;i++){
+    let timesMarked = 0;
+    for(let j = 0;j < board.length;j++){
+      if(board[i][j] == currentMarker){
+        timesMarked++ ;
+      }
+      else{
+        continue;
+      }
+    }
+    if(timesMarked === 3) return true;
+  }
+  return false;
 }
 
 const verticalWin = () => {
   // @TODO, Your code here: to check for vertical wins
+  for(let i = 0;i < board.length;i++){
+    let timesMarked = 0;
+    for(let j = 0;j < board.length;j++){
+      if(board[j][i] == currentMarker){
+        timesMarked++ ;
+      }
+      else{
+        continue;
+      }
+    }
+    if(timesMarked === 3) return true;
+  }
+  return false;
 }
 
 const diagonalWin = () => {
   // @TODO, Your code here: to check for diagonal wins
+  if(currentMarker == board[0][0] && currentMarker == board[1][1] && currentMarker == board[2][2] ) return true;
+  if(currentMarker == board[0][2] && currentMarker == board[1][1] && currentMarker == board[2][0] ) return true;
+
+  return false;
 }
 
 const changeMarker = () => {
@@ -95,6 +170,11 @@ const resetBoard = () => {
   }
   
   // @TODO, Your code here: make sure to reset the array of arrays to empty for a new game
+  for(let i = 0;i < board.length;i++){
+    for(let j = 0;j < board.length;j++){
+      board[j][i] = '';
+    }
+  }
 }
 
 // **BONUSES**
